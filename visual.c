@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:33 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/20 12:03:48 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/20 16:14:47 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -32,7 +32,7 @@ void fill_screen(t_ms *ms)
 {
 	for (int i = 10; i < ms->win_width - 10; i++) {
 		for (int j = 10; j < ms->win_height - 10; j++) {
-			if (j < 60)
+			if (j <= 60)
 				my_mlx_pixel_put(ms->img[1], i, j, 0xFFFFFF);
 			else
 				my_mlx_pixel_put(ms->img[1], i, j, 0x000000);
@@ -132,6 +132,59 @@ int	deal_key(int key, t_ms * ms)
 	return (0);
 }
 
+bool get_square_index(int *sqr_x, int *sqr_y, int x, int y)
+{
+	y -= 70;
+	x -= 10;
+
+	int tmp_x = x % 28;
+	int tmp_y = y % 28;
+
+	if (tmp_x >= 25 || tmp_y >= 25)
+		return false;
+	
+	(*sqr_x) = (int)(x / 28);
+	(*sqr_y) = (int)(y / 28);
+
+	return (true);
+}
+
+bool	is_opened(char c)
+{
+	if (c >= 48 && c <= 57)
+		return (true);
+	return (false);
+}
+
+int deal_mouse(int button, int x, int y, t_ms *ms)
+{
+	int sqr_x = 0, sqr_y = 0;
+
+	if (y >= 70 && y <= ms->win_height - 10 &&
+		x >= 10 && x <= ms->win_width - 10)
+	{
+		if (get_square_index(&sqr_x, &sqr_y, x, y))
+		{
+			if (is_opened(ms->myBoard[sqr_y][sqr_x]))
+				return (0);
+			if (button == 1)
+			{
+				if (ms->myBoard[sqr_y][sqr_x] == 'F')
+					return (0);
+				// playMinesweeperUtil(ms, sqr_y, sqr_x);
+			}
+			
+			if (button == 2)
+			{
+				
+			}
+		}
+	}
+	return (0);
+}
+
+// int	mouse_move(int x, int y, t_ms *ms) {}
+
 void	execute(t_ms *ms)
 {
 	ms->mlx = mlx_init();
@@ -139,10 +192,13 @@ void	execute(t_ms *ms)
 	initialize_sprites(ms);
 	ms->img[0] = new_image(ms);
 	ms->img[1] = new_image(ms);
+	ms->movesLeft = SIDE * SIDE - MINES;
 	fill_screen(ms);
 	draw_game(ms);
 	swap_maps(ms);
 	mlx_put_image_to_window(ms->mlx, ms->win, ms->img[0]->img, 0, 0);
+	mlx_mouse_hook(ms->win, deal_mouse, ms);
+	// mlx_hook(ms->win, 6, 0, mouse_move, ms);  // Button hoovering
 	mlx_hook(ms->win, 02, 1L << 0, deal_key, ms);
 	mlx_hook(ms->win, 17, 1L << 17, close_win, ms);
 	mlx_loop(ms->mlx);

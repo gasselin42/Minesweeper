@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:55 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/20 10:50:59 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/20 15:52:30 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -27,6 +27,9 @@
 #define INTERMEDIATE 1
 #define ADVANCED 2
 #define N_SPRITE 7
+
+#define MAXSIDE 40
+#define MAXMINES 400
 
 #define PINK_SQR 0
 #define GREY_SQR 1
@@ -66,21 +69,29 @@ typedef struct s_ms {
 	void	*win;
 	int		win_width;
 	int		win_height;
+	int		movesLeft;
 
-	// new_image
+	// new_images
 	t_img	*img[2];
 
-	//sprites
+	// sprites
 	t_sprite	*sprites[N_SPRITE];
+
+	// grids
+	char	realBoard[MAXSIDE][MAXSIDE];
+	char	myBoard[MAXSIDE][MAXSIDE];
+	int		mines[MAXMINES][2];
+
+	// bool switches
+	bool	gameOver;
 }	t_ms;
 
 bool 	isValid(int row, int col);
 bool 	isMine (int row, int col, char board[][SIDE]);
 void 	printBoard(char myBoard[][SIDE]);
 int 	countAdjacentMines(int row ,int col ,int mines[][2], char realBoard[][SIDE]);
-bool 	playMinesweeperUtil(char myBoard[][SIDE], char realBoard[][SIDE],
-							int mines[][2], int row, int col, int *movesLeft);
-void 	placeMines(int mines[][2], char realBoard[][SIDE]);
+bool 	playMinesweeperUtil(t_ms *ms, int row, int col);
+void 	placeMines(t_ms *ms);
 void 	playMinesweeper(t_ms *ms);
 void 	chooseDifficultyLevel(int level);
 int		initialize_difficulty(void);

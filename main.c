@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/20 12:06:35 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/20 15:54:09 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,85 +119,84 @@ int countAdjacentMines(int row ,int col ,int mines[][2], char realBoard[][SIDE])
 }
 
 // A Recursive Function to play the Minesweeper Game
-bool playMinesweeperUtil(char myBoard[][SIDE], char realBoard[][SIDE],
-			int mines[][2], int row, int col, int *movesLeft)
+bool playMinesweeperUtil(t_ms *ms, int row, int col)
 {
 
 	// Base Case of Recursion
-	if (myBoard[row][col] != '-')
+	if (ms->myBoard[row][col] != '-')
 		return (false);
 
 	int i, j;
 
 	// You opened a mine
 	// You are going to lose
-	if (realBoard[row][col] == '*')
+	if (ms->realBoard[row][col] == '*')
 	{
-		myBoard[row][col]='*';
+		ms->myBoard[row][col]='*';
 
 		for (i=0; i<MINES; i++)
-			myBoard[mines[i][0]][mines[i][1]]='*';
+			ms->myBoard[ms->mines[i][0]][ms->mines[i][1]]='*';
 
-		printBoard (myBoard);
-		printf ("\nYou lost!\n");
+		printBoard (ms->myBoard);
+		// printf ("\nYou lost!\n");
 		return (true) ;
 	}
 
 	else
 	{
-		int count = countAdjacentMines(row, col, mines, realBoard);
-		(*movesLeft)--;
+		int count = countAdjacentMines(row, col, ms->mines, ms->realBoard);
+		ms->movesLeft--;
 
-		myBoard[row][col] = count + '0';
+		ms->myBoard[row][col] = count + '0';
 
 		if (!count)
 		{
 			if (isValid (row-1, col) == true)
 			{
-				if (isMine (row-1, col, realBoard) == false)
-				playMinesweeperUtil(myBoard, realBoard, mines, row-1, col, movesLeft);
+				if (isMine (row-1, col, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row-1, col);
 			}
 
 			if (isValid (row+1, col) == true)
 			{
-				if (isMine (row+1, col, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row+1, col, movesLeft);
+				if (isMine (row+1, col, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row+1, col);
 			}
 
 			if (isValid (row, col+1) == true)
 			{
-				if (isMine (row, col+1, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row, col+1, movesLeft);
+				if (isMine (row, col+1, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row, col+1);
 			}
 
 			if (isValid (row, col-1) == true)
 			{
-				if (isMine (row, col-1, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row, col-1, movesLeft);
+				if (isMine (row, col-1, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row, col-1);
 			}
 
 			if (isValid (row-1, col+1) == true)
 			{
-				if (isMine (row-1, col+1, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row-1, col+1, movesLeft);
+				if (isMine (row-1, col+1, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row-1, col+1);
 			}
 
 			if (isValid (row-1, col-1) == true)
 			{
-				if (isMine (row-1, col-1, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row-1, col-1, movesLeft);
+				if (isMine (row-1, col-1, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row-1, col-1);
 			}
 
 			if (isValid (row+1, col+1) == true)
 			{
-				if (isMine (row+1, col+1, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row+1, col+1, movesLeft);
+				if (isMine (row+1, col+1, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row+1, col+1);
 			}
 
 			if (isValid (row+1, col-1) == true)
 			{
-				if (isMine (row+1, col-1, realBoard) == false)
-					playMinesweeperUtil(myBoard, realBoard, mines, row+1, col-1, movesLeft);
+				if (isMine (row+1, col-1, ms->realBoard) == false)
+					playMinesweeperUtil(ms, row+1, col-1);
 			}
 		}
 
@@ -207,7 +206,7 @@ bool playMinesweeperUtil(char myBoard[][SIDE], char realBoard[][SIDE],
 
 // A Function to place the mines randomly
 // on the board
-void placeMines(int mines[][2], char realBoard[][SIDE])
+void placeMines(t_ms *ms)
 {
 	bool mark[SIDE*SIDE];
 
@@ -225,12 +224,12 @@ void placeMines(int mines[][2], char realBoard[][SIDE])
 		if (mark[random] == false)
 		{
 			// Row Index of the Mine
-			mines[i][0] = x;
+			ms->mines[i][0] = x;
 			// Column Index of the Mine
-			mines[i][1] = y;
+			ms->mines[i][1] = y;
 
 			// Place the mine
-			realBoard[mines[i][0]][mines[i][1]] = '*';
+			ms->realBoard[ms->mines[i][0]][ms->mines[i][1]] = '*';
 			mark[random] = true;
 			i++;
 		}
@@ -240,14 +239,15 @@ void placeMines(int mines[][2], char realBoard[][SIDE])
 }
 
 // A Function to initialise the game
-void initialise (char realBoard[][SIDE], char myBoard[][SIDE])
+void initialise (t_ms *ms)
 {
 	// Assign all the cells as mine-free
 	for (int i=0; i<SIDE; i++)
 	{
 		for (int j=0; j<SIDE; j++)
 		{
-			myBoard[i][j] = realBoard[i][j] = '-';
+			ms->myBoard[i][j] = '-';
+			ms->realBoard[i][j] = '-';
 		}
 	}
 
@@ -258,41 +258,40 @@ void initialise (char realBoard[][SIDE], char myBoard[][SIDE])
 void playMinesweeper (t_ms *ms)
 {
 	// Initially the game is not over
-	bool gameOver = false;
+	ms->gameOver = false;
 
 	// Actual Board and My Board
-	char realBoard[SIDE][SIDE], myBoard[SIDE][SIDE];
+	// char realBoard[SIDE][SIDE], myBoard[SIDE][SIDE];
 
-	int movesLeft = SIDE * SIDE - MINES, x, y;
-	int mines[MINES][2]; // Stores (x, y) coordinates of all mines.
-	int moves[SIDE][2]; // Stores (x, y) coordinates of the moves
+	// int mines[MINES][2]; // Stores (x, y) coordinates of all mines.
+	// int moves[SIDE][2]; // Stores (x, y) coordinates of the moves
 
 	// Initialise the Game
-	initialise (realBoard, myBoard);
+	initialise (ms);
 
 	// Place the Mines randomly
-	placeMines (mines, realBoard);
+	placeMines (ms);
 
 	// You are in the game until you have not opened a mine
 	// So keep playing
 
 	int currentMoveIndex = 0;
-	while (gameOver == false)
+	while (ms->gameOver == false)
 	{
-		printf ("Current Status of Board : \n");
-		printBoard (myBoard);
+		// printf ("Current Status of Board : \n");
+		// printBoard (ms->myBoard);
 
-		printf("Enter coordinates of your next move (x y) : ");
-		scanf("%d %d", &x, &y);
+		// printf("Enter coordinates of your next move (x y) : ");
+		// scanf("%d %d", &x, &y);
 
 		currentMoveIndex ++;
 
-		gameOver = playMinesweeperUtil (myBoard, realBoard, mines, x, y, &movesLeft);
+		// ms->gameOver = playMinesweeperUtil (ms, x, y, &ms->movesLeft);
 
-		if ((gameOver == false) && (movesLeft == 0))
+		if ((ms->gameOver == false) && (ms->movesLeft == 0))
 		{
 			printf ("\nYou won !\n");
-			gameOver = true;
+			ms->gameOver = true;
 		}
 	}
 
@@ -367,7 +366,14 @@ int    initialize_difficulty(void)
     return (0);
 }
 
-// Driver Program to test above functions
+void	init_grids(t_ms *ms)
+{
+	for (int i = 0; i < MAXSIDE; i++) {
+		memset(ms->realBoard[i], '\0', MAXSIDE);
+		memset(ms->myBoard[i], '\0', MAXSIDE);
+	}
+}
+
 int main()
 {
 	t_ms	ms;
@@ -380,9 +386,13 @@ int main()
     if (initialize_difficulty())
         return (1);
 
+	init_grids(&ms);
+	
 	ms.win_height = (10 * 3) + 50 + (25 * SIDE) + (3 * (SIDE - 1));
 	ms.win_width = (10 * 2) + (25 * SIDE) + (3 * (SIDE - 1));
+	
 	execute(&ms);
 	// playMinesweeper (&ms);
+	
 	return (0);
 }
