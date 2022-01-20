@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/19 16:43:32 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/20 12:06:35 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -337,13 +337,13 @@ int    initialize_difficulty(void)
 
     if (!strcmp(input, "B") || !strcmp(input, "I") || !strcmp(input, "A") || !strcmp(input, "C")) {
         if (!strcmp(input, "C")) {
-            printf("Enter side lengths (maximum 50) : ");
+            printf("Enter side lengths (maximum 40) : ");
             scanf("%d", &SIDE);
-            if (SIDE < 1 || SIDE > 50)
-                return (printf("Incorrect side lengths, must be between 1 and 50\n"));
-            printf("Enter number of mines (maximum 500 or 30%% of number of cells) : ");
+            if (SIDE < 1 || SIDE > 40)
+                return (printf("Incorrect side lengths, must be between 1 and 40\n"));
+            printf("Enter number of mines (maximum 400 or 30%% of number of cells) : ");
             scanf("%d", &MINES);
-            if (MINES < 1 || MINES > 500 || MINES > (SIDE*SIDE*0.3))
+            if (MINES < 1 || MINES > 400 || MINES > (SIDE*SIDE*0.3))
                 return (printf("Incorrect number of mines, must be between 0 and %d\n", (int)(SIDE*SIDE*0.3)));
         }
         else {
@@ -380,8 +380,8 @@ int main()
     if (initialize_difficulty())
         return (1);
 
-	ms.win_height = (10 * 3) + 50 + (20 * SIDE);
-	ms.win_width = (10 * 2) + (20 * SIDE);
+	ms.win_height = (10 * 3) + 50 + (25 * SIDE) + (3 * (SIDE - 1));
+	ms.win_width = (10 * 2) + (25 * SIDE) + (3 * (SIDE - 1));
 	execute(&ms);
 	// playMinesweeper (&ms);
 	return (0);
