@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:33 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/20 16:14:47 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 11:45:25 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -33,9 +33,9 @@ void fill_screen(t_ms *ms)
 	for (int i = 10; i < ms->win_width - 10; i++) {
 		for (int j = 10; j < ms->win_height - 10; j++) {
 			if (j <= 60)
-				my_mlx_pixel_put(ms->img[1], i, j, 0xFFFFFF);
+				my_mlx_pixel_put(ms->img[0], i, j, 0xFFFFFF);
 			else
-				my_mlx_pixel_put(ms->img[1], i, j, 0x000000);
+				my_mlx_pixel_put(ms->img[0], i, j, 0x000000);
 		}
 	}
 }
@@ -63,13 +63,22 @@ t_img	*new_image(t_ms *ms)
 
 void	initialize_sprites(t_ms *ms)
 {
+	ms->sprites[0] = new_sprite(ms->mlx, "./assets/0.xpm");
+	ms->sprites[1] = new_sprite(ms->mlx, "./assets/1.xpm");
+	ms->sprites[2] = new_sprite(ms->mlx, "./assets/2.xpm");
+	ms->sprites[3] = new_sprite(ms->mlx, "./assets/3.xpm");
+	ms->sprites[4] = new_sprite(ms->mlx, "./assets/4.xpm");
+	ms->sprites[5] = new_sprite(ms->mlx, "./assets/5.xpm");
+	ms->sprites[6] = new_sprite(ms->mlx, "./assets/6.xpm");
+	ms->sprites[7] = new_sprite(ms->mlx, "./assets/7.xpm");
+	ms->sprites[8] = new_sprite(ms->mlx, "./assets/8.xpm");
 	ms->sprites[PINK_SQR] = new_sprite(ms->mlx, "./assets/pink_square.xpm");
-	ms->sprites[GREY_SQR] = new_sprite(ms->mlx, "./assets/grey_square.xpm");
-	ms->sprites[RED_SQR] = new_sprite(ms->mlx, "./assets/red_square.xpm");
+	ms->sprites[FLAG] = new_sprite(ms->mlx, "./assets/grey_square_flag.xpm");
+	ms->sprites[BOMB_RED] = new_sprite(ms->mlx, "./assets/red_square_bomb.xpm");
+	ms->sprites[BOMB_PINK] = new_sprite(ms->mlx, "./assets/pink_square_bomb.xpm");
+	ms->sprites[BOMB_GREY] = new_sprite(ms->mlx, "./assets/grey_square_bomb.xpm");
 	ms->sprites[HPIPE] = new_sprite(ms->mlx, "./assets/horizontal_pipe.xpm");
 	ms->sprites[VPIPE] = new_sprite(ms->mlx, "./assets/vertical_pipe.xpm");
-	ms->sprites[COG] = new_sprite(ms->mlx, "./assets/cog.xpm");
-	ms->sprites[FLAG] = new_sprite(ms->mlx, "./assets/flag.xpm");
 }
 
 void	draw_tile(t_ms *ms, int index, int x, int y)
@@ -85,7 +94,7 @@ void	draw_tile(t_ms *ms, int index, int x, int y)
 		while (i < ms->sprites[index]->width)
 		{
 			color = get_pixel(ms->sprites[index], i, j);
-			my_mlx_pixel_put(ms->img[1], x + i, y + j, color);
+			my_mlx_pixel_put(ms->img[0], x + i, y + j, color);
 			++i;
 		}
 		++j;
@@ -96,11 +105,48 @@ void	draw_game(t_ms *ms)
 {
 	for (int y = 0; y < SIDE; y++) {
 		for (int x = 0; x < SIDE; x++) {
-			draw_tile(ms, PINK_SQR, 10 + (x * 28), 60 + 10 + (y * 28));
+			switch (ms->realBoard[y][x]) {
+				case '-':
+					draw_tile(ms, PINK_SQR, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case 'F':
+					draw_tile(ms, FLAG, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '0':
+					draw_tile(ms, 0, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '1':
+					draw_tile(ms, 1, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '2':
+					draw_tile(ms, 2, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '3':
+					draw_tile(ms, 3, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '4':
+					draw_tile(ms, 4, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '5':
+					draw_tile(ms, 5, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '6':
+					draw_tile(ms, 6, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '7':
+					draw_tile(ms, 7, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '8':
+					draw_tile(ms, 8, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+				case '*':
+					draw_tile(ms, BOMB_RED, 10 + (x * 29), 60 + 10 + (y * 29));
+					break;
+			}
 			if (y > 0 && x < SIDE)
-				draw_tile(ms, HPIPE, 10 + (x * 28), 60 + 7 + (y * 28));
+				draw_tile(ms, HPIPE, 10 + (x * 29), 60 + 6 + (y * 29));
 			if (x > 0 && y < SIDE)
-				draw_tile(ms, VPIPE, 7 + (x * 28), 60 + 10 + (y * 28));
+				draw_tile(ms, VPIPE, 6 + (x * 29), 60 + 10 + (y * 29));
 		}
 	}
 }
@@ -137,14 +183,14 @@ bool get_square_index(int *sqr_x, int *sqr_y, int x, int y)
 	y -= 70;
 	x -= 10;
 
-	int tmp_x = x % 28;
-	int tmp_y = y % 28;
+	int tmp_x = x % 29;
+	int tmp_y = y % 29;
 
 	if (tmp_x >= 25 || tmp_y >= 25)
 		return false;
 	
-	(*sqr_x) = (int)(x / 28);
-	(*sqr_y) = (int)(y / 28);
+	(*sqr_x) = (int)(x / 29);
+	(*sqr_y) = (int)(y / 29);
 
 	return (true);
 }
@@ -195,9 +241,9 @@ void	execute(t_ms *ms)
 	ms->movesLeft = SIDE * SIDE - MINES;
 	fill_screen(ms);
 	draw_game(ms);
-	swap_maps(ms);
+	// swap_maps(ms);
 	mlx_put_image_to_window(ms->mlx, ms->win, ms->img[0]->img, 0, 0);
-	mlx_mouse_hook(ms->win, deal_mouse, ms);
+	// mlx_mouse_hook(ms->win, deal_mouse, ms);
 	// mlx_hook(ms->win, 6, 0, mouse_move, ms);  // Button hoovering
 	mlx_hook(ms->win, 02, 1L << 0, deal_key, ms);
 	mlx_hook(ms->win, 17, 1L << 17, close_win, ms);

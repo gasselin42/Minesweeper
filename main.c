@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/20 15:54:09 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 11:43:23 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -24,7 +24,7 @@ bool isValid(int row, int col)
 
 // A Utility Function to check whether given cell (row, col)
 // has a mine or not.
-bool isMine (int row, int col, char board[][SIDE])
+bool isMine (int row, int col, char board[][MAXSIDE])
 {
 	if (board[row][col] == '*')
 		return (true);
@@ -33,7 +33,7 @@ bool isMine (int row, int col, char board[][SIDE])
 }
 
 // A Function to print the current gameplay board
-void printBoard(char myBoard[][SIDE])
+void printBoard(char myBoard[][MAXSIDE])
 {
 	int i,j;
 
@@ -61,7 +61,7 @@ void printBoard(char myBoard[][SIDE])
 
 // A Function to count the number of
 // mines in the adjacent cells
-int countAdjacentMines(int row ,int col ,int mines[][2], char realBoard[][SIDE])
+int countAdjacentMines(int row ,int col ,int mines[MAXMINES][2], char realBoard[][MAXSIDE])
 {
 
 	int i;
@@ -116,6 +116,18 @@ int countAdjacentMines(int row ,int col ,int mines[][2], char realBoard[][SIDE])
 	}
 
 	return (count);
+}
+
+void	place_indexes(t_ms *ms)
+{
+	for (int i=0; i<SIDE; i++)
+	{
+		for (int j=0; j<SIDE; j++)
+		{
+			if (ms->realBoard[i][j] != '*')
+				ms->realBoard[i][j] = '0' + countAdjacentMines(i, j, ms->mines, ms->realBoard);
+		}
+	}
 }
 
 // A Recursive Function to play the Minesweeper Game
@@ -388,8 +400,17 @@ int main()
 
 	init_grids(&ms);
 	
-	ms.win_height = (10 * 3) + 50 + (25 * SIDE) + (3 * (SIDE - 1));
-	ms.win_width = (10 * 2) + (25 * SIDE) + (3 * (SIDE - 1));
+	ms.win_height = (10 * 3) + 50 + (25 * SIDE) + (4 * (SIDE - 1));
+	ms.win_width = (10 * 2) + (25 * SIDE) + (4 * (SIDE - 1));
+
+	// Initialise the Game
+	initialise (&ms);
+
+	// Place the Mines randomly
+	placeMines (&ms);
+
+	// Place the indexes on realBoard
+	place_indexes(&ms);
 	
 	execute(&ms);
 	// playMinesweeper (&ms);

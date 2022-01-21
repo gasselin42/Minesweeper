@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:55 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/20 15:52:30 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 11:42:45 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -26,18 +26,18 @@
 #define BEGINNER 0
 #define INTERMEDIATE 1
 #define ADVANCED 2
-#define N_SPRITE 7
+#define N_SPRITE 16
 
 #define MAXSIDE 40
 #define MAXMINES 400
 
-#define PINK_SQR 0
-#define GREY_SQR 1
-#define RED_SQR 2
-#define HPIPE 3
-#define VPIPE 4
-#define COG 5
-#define FLAG 6
+#define PINK_SQR 9
+#define FLAG 10
+#define BOMB_RED 11
+#define BOMB_PINK 12
+#define BOMB_GREY 13
+#define HPIPE 14
+#define VPIPE 15
 
 int SIDE; // side length of the board
 int MINES; // number of mines on the board
@@ -87,9 +87,9 @@ typedef struct s_ms {
 }	t_ms;
 
 bool 	isValid(int row, int col);
-bool 	isMine (int row, int col, char board[][SIDE]);
-void 	printBoard(char myBoard[][SIDE]);
-int 	countAdjacentMines(int row ,int col ,int mines[][2], char realBoard[][SIDE]);
+bool 	isMine (int row, int col, char board[][MAXSIDE]);
+void 	printBoard(char myBoard[][MAXSIDE]);
+int 	countAdjacentMines(int row ,int col ,int mines[MAXMINES][2], char realBoard[][MAXSIDE]);
 bool 	playMinesweeperUtil(t_ms *ms, int row, int col);
 void 	placeMines(t_ms *ms);
 void 	playMinesweeper(t_ms *ms);
