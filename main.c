@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/21 12:22:49 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 16:58:24 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -119,17 +119,15 @@ bool playMinesweeperUtil(t_ms *ms, int row, int col)
 	{
 		ms->myBoard[row][col] = '*';
 
-		for (i=0; i<MINES; i++)
+		for (i = 0; i < MINES; i++)
 			ms->myBoard[ms->mines[i][0]][ms->mines[i][1]] = '*';
-
+		ms->gameOver = true;
+		ms->start_timer = false;
 		return (true) ;
 	}
 
 	else
 	{
-		// int count = countAdjacentMines(row, col, ms->mines, ms->realBoard);
-		ms->movesLeft--;
-
 		ms->myBoard[row][col] = ms->realBoard[row][col];
 
 		if (ms->realBoard[row][col] == '0')
@@ -243,12 +241,6 @@ void playMinesweeper (t_ms *ms)
 	// Initially the game is not over
 	ms->gameOver = false;
 
-	// Actual Board and My Board
-	// char realBoard[SIDE][SIDE], myBoard[SIDE][SIDE];
-
-	// int mines[MINES][2]; // Stores (x, y) coordinates of all mines.
-	// int moves[SIDE][2]; // Stores (x, y) coordinates of the moves
-
 	// Initialise the Game
 	initialise (ms);
 
@@ -271,11 +263,11 @@ void playMinesweeper (t_ms *ms)
 
 		// ms->gameOver = playMinesweeperUtil (ms, x, y, &ms->movesLeft);
 
-		if ((ms->gameOver == false) && (ms->movesLeft == 0))
-		{
-			printf ("\nYou won !\n");
-			ms->gameOver = true;
-		}
+		// if ((ms->gameOver == false) && (ms->movesLeft == 0))
+		// {
+		// 	printf ("\nYou won !\n");
+		// 	ms->gameOver = true;
+		// }
 	}
 
 	return;
@@ -321,8 +313,8 @@ int    initialize_difficulty(void)
         if (!strcmp(input, "C")) {
             printf("Enter side lengths (maximum 40) : ");
             scanf("%d", &SIDE);
-            if (SIDE < 1 || SIDE > 40)
-                return (printf("Incorrect side lengths, must be between 1 and 40\n"));
+            if (SIDE < 5 || SIDE > 40)
+                return (printf("Incorrect side lengths, must be between 5 and 40\n"));
             printf("Enter number of mines (maximum 400 or 30%% of number of cells) : ");
             scanf("%d", &MINES);
             if (MINES < 1 || MINES > 400 || MINES > (SIDE*SIDE*0.3))
@@ -366,6 +358,10 @@ int main()
 	// the same configuration doesn't arises
 	srand(time(NULL));
 
+	ms.gameOver = false;
+	ms.start_timer = false;
+	ms.gameWon = false;
+
     if (initialize_difficulty())
         return (1);
 
@@ -384,7 +380,6 @@ int main()
 	place_indexes(&ms);
 	
 	execute(&ms);
-	// playMinesweeper (&ms);
 	
 	return (0);
 }
