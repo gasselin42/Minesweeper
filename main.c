@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/21 12:16:08 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:17:36 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -30,33 +30,6 @@ bool isMine (int row, int col, char board[][MAXSIDE])
 		return (true);
 	else
 		return (false);
-}
-
-// A Function to print the current gameplay board
-void printBoard(char myBoard[][MAXSIDE])
-{
-	int i,j;
-
-	printf ("  ");
-	if (SIDE >= 10)
-		printf (" ");
-
-	for (i = 0; i < SIDE; i++)
-		printf ("%d ", i);
-
-	printf ("\n");
-
-	for (i = 0; i < SIDE; i++)
-	{
-		if (SIDE >= 10 && i < 10)
-			printf (" ");
-		printf ("%d ", i);
-
-		for (j = 0; j < SIDE; j++)
-			printf ("%c ", myBoard[i][j]);
-		printf ("\n");
-	}
-	return;
 }
 
 // A Function to count the number of
