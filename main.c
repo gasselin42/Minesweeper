@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/21 12:17:36 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:22:49 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -122,8 +122,6 @@ bool playMinesweeperUtil(t_ms *ms, int row, int col)
 		for (i=0; i<MINES; i++)
 			ms->myBoard[ms->mines[i][0]][ms->mines[i][1]] = '*';
 
-		printBoard (ms->myBoard);
-		// printf ("\nYou lost!\n");
 		return (true) ;
 	}
 
