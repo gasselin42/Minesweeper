@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/21 11:43:23 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/21 12:16:08 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -19,7 +19,7 @@ bool isValid(int row, int col)
 	// Returns true if row number and column number
 	// is in range
 	return (row >= 0) && (row < SIDE) &&
-		(col >= 0) && (col < SIDE);
+			(col >= 0) && (col < SIDE);
 }
 
 // A Utility Function to check whether given cell (row, col)
@@ -41,18 +41,18 @@ void printBoard(char myBoard[][MAXSIDE])
 	if (SIDE >= 10)
 		printf (" ");
 
-	for (i=0; i<SIDE; i++)
+	for (i = 0; i < SIDE; i++)
 		printf ("%d ", i);
 
 	printf ("\n");
 
-	for (i=0; i<SIDE; i++)
+	for (i = 0; i < SIDE; i++)
 	{
 		if (SIDE >= 10 && i < 10)
 			printf (" ");
 		printf ("%d ", i);
 
-		for (j=0; j<SIDE; j++)
+		for (j = 0; j < SIDE; j++)
 			printf ("%c ", myBoard[i][j]);
 		printf ("\n");
 	}
@@ -144,10 +144,10 @@ bool playMinesweeperUtil(t_ms *ms, int row, int col)
 	// You are going to lose
 	if (ms->realBoard[row][col] == '*')
 	{
-		ms->myBoard[row][col]='*';
+		ms->myBoard[row][col] = '*';
 
 		for (i=0; i<MINES; i++)
-			ms->myBoard[ms->mines[i][0]][ms->mines[i][1]]='*';
+			ms->myBoard[ms->mines[i][0]][ms->mines[i][1]] = '*';
 
 		printBoard (ms->myBoard);
 		// printf ("\nYou lost!\n");
@@ -156,12 +156,12 @@ bool playMinesweeperUtil(t_ms *ms, int row, int col)
 
 	else
 	{
-		int count = countAdjacentMines(row, col, ms->mines, ms->realBoard);
+		// int count = countAdjacentMines(row, col, ms->mines, ms->realBoard);
 		ms->movesLeft--;
 
-		ms->myBoard[row][col] = count + '0';
+		ms->myBoard[row][col] = ms->realBoard[row][col];
 
-		if (!count)
+		if (ms->realBoard[row][col] == '0')
 		{
 			if (isValid (row-1, col) == true)
 			{
@@ -225,7 +225,7 @@ void placeMines(t_ms *ms)
 	memset(mark, false, sizeof (mark));
 
 	// Continue until all random mines have been created.
-	for (int i=0; i<MINES; )
+	for (int i = 0; i < MINES; )
 	{
 		int random = rand() % (SIDE*SIDE);
 		int x = random / SIDE;
