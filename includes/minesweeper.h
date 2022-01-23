@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:55 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/23 12:26:56 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/23 15:39:18 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -35,7 +35,7 @@
 #define BEGINNER 0
 #define INTERMEDIATE 1
 #define ADVANCED 2
-#define N_SPRITE 29
+#define N_SPRITE 31
 
 #define MAXSIDE 40
 #define MAXMINES 400
@@ -50,6 +50,8 @@
 #define VPIPE 26
 #define MINUS 27
 #define DARK_PINK 28
+#define GAME_WON 29
+#define GAME_LOST 30
 
 int SIDE; // side length of the board
 int MINES; // number of mines on the board

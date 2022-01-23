@@ -6,7 +6,7 @@
 #    By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/22 11:49:55 by gasselin          #+#    #+#              #
-#    Updated: 2022/01/23 14:43:21 by gasselin         ###   ########.fr        #
+#    Updated: 2022/01/23 16:09:18 by gasselin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -21,7 +21,7 @@ SRCS =		main.c visual.c
 CC =		gcc
 CFLAGS =	-Wall -Werror -Wextra
 INCS =		-Imlx_mac -Iincludes
-LIBS =		-Lmlx_mac -lmlx -framework OpenGL -framework AppKit
+LIBS =		-framework OpenGL -framework AppKit
 OBJS =		$(SRCS:.c=.o)
 
 SRCS_PATH = $(addprefix $(SRCS_DIR)/, $(SRCS))
@@ -39,7 +39,7 @@ $(NAME): $(OBJ_DIR) $(OBJS_PATH)
 else
 $(NAME): $(OBJ_DIR) $(OBJS_PATH)
 	@make re --no-print-directory -C ./mlx_mac
-	@$(CC) $(LIBS) $(OBJS_PATH) -o $(NAME)
+	@$(CC) $(LIBS) $(OBJS_PATH) -o $(NAME) ./mlx_mac/libmlx.a
 endif
 
 $(OBJ_DIR):
@@ -52,9 +52,7 @@ all: $(NAME)
 
 clean:
 	@rm -rf $(OBJS_PATH) $(OBJ_DIR)
-	@make clean --no-print-directory -C ./mlx_mac
-	@make clean --no-print-directory -C ./mlx_linux
-
+	
 fclean: clean
 	@rm -f $(NAME)
 
