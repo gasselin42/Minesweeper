@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/23 12:22:37 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/23 14:57:55 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -211,8 +211,6 @@ void placeMines(t_ms *ms)
 			i++;
 		}
 	}
-
-	return;
 }
 
 // A Function to initialise the game
@@ -227,46 +225,6 @@ void initialise (t_ms *ms)
 			ms->realBoard[i][j] = '-';
 		}
 	}
-
-	return;
-}
-
-// A Function to play Minesweeper game
-void playMinesweeper (t_ms *ms)
-{
-	// Initially the game is not over
-	ms->gameOver = false;
-
-	// Initialise the Game
-	initialise (ms);
-
-	// Place the Mines randomly
-	placeMines (ms);
-
-	// You are in the game until you have not opened a mine
-	// So keep playing
-
-	int currentMoveIndex = 0;
-	while (ms->gameOver == false)
-	{
-		// printf ("Current Status of Board : \n");
-		// printBoard (ms->myBoard);
-
-		// printf("Enter coordinates of your next move (x y) : ");
-		// scanf("%d %d", &x, &y);
-
-		currentMoveIndex ++;
-
-		// ms->gameOver = playMinesweeperUtil (ms, x, y, &ms->movesLeft);
-
-		// if ((ms->gameOver == false) && (ms->movesLeft == 0))
-		// {
-		// 	printf ("\nYou won !\n");
-		// 	ms->gameOver = true;
-		// }
-	}
-
-	return;
 }
 
 // A Function to choose the difficulty level
@@ -290,8 +248,6 @@ void chooseDifficultyLevel (int level)
 		SIDE = 24;
 		MINES = 99;
 	}
-
-	return;
 }
 
 int    initialize_difficulty(void)
