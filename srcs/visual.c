@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:33 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/23 12:27:11 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/01/23 15:51:27 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -18,7 +18,7 @@ long int	get_time(void)
 	long int		time;
 
 	gettimeofday(&tv, NULL);
-	time = tv.tv_sec; // * 1000) + (tv.tv_usec / 1000);
+	time = tv.tv_sec;
 	return (time);
 }
 
@@ -104,6 +104,9 @@ void	initialize_sprites(t_ms *ms)
 	ms->sprites[VPIPE] = new_sprite(ms->mlx, "./assets/vertical_pipe.xpm");
 	ms->sprites[MINUS] = new_sprite(ms->mlx, "./assets/minus.xpm");
 	ms->sprites[DARK_PINK] = new_sprite(ms->mlx, "./assets/pink_square_dark.xpm");
+
+	ms->sprites[GAME_WON] = new_sprite(ms->mlx, "./assets/gameWon.xpm");
+	ms->sprites[GAME_LOST] = new_sprite(ms->mlx, "./assets/gameLost.xpm");
 }
 
 void	draw_tile(t_ms *ms, int index, int x, int y)
@@ -128,10 +131,6 @@ void	draw_tile(t_ms *ms, int index, int x, int y)
 
 void	draw_game(t_ms *ms)
 {
-	// for (int i = 0; i < 10; i++) {
-	// 	draw_tile(ms, i, 10 + (24 * i), 10);
-	// }
-	
 	for (int y = 0; y < SIDE; y++) {
 		for (int x = 0; x < SIDE; x++) {
 			switch (ms->myBoard[y][x]) {
@@ -441,10 +440,12 @@ int update_map(t_ms *ms)
 		draw_hover(ms);
 	update_time(ms);
 	update_mine_count(ms);
+	if (ms->gameWon)
+		draw_tile(ms, GAME_WON, (int)ms->win_width/2 - 25, 15);
+	if (ms->gameOver)
+		draw_tile(ms, GAME_LOST, (int)ms->win_width/2 - 26, 15);
 	swap_maps(ms);
 	mlx_put_image_to_window(ms->mlx, ms->win, ms->img[0]->img, 0, 0);
-	if (ms->gameWon)
-		mlx_string_put(ms->mlx, ms->win, 20, 20, 0xFF0000, "Game won!");
 	return (0);
 }
 
