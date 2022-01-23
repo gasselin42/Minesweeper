@@ -6,7 +6,7 @@
 #    By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/22 11:49:55 by gasselin          #+#    #+#              #
-#    Updated: 2022/01/23 12:17:42 by gasselin         ###   ########.fr        #
+#    Updated: 2022/01/23 14:43:21 by gasselin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -52,6 +52,8 @@ all: $(NAME)
 
 clean:
 	@rm -rf $(OBJS_PATH) $(OBJ_DIR)
+	@make clean --no-print-directory -C ./mlx_mac
+	@make clean --no-print-directory -C ./mlx_linux
 
 fclean: clean
 	@rm -f $(NAME)
