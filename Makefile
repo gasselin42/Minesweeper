@@ -6,48 +6,55 @@
 #    By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/22 11:49:55 by gasselin          #+#    #+#              #
-#    Updated: 2022/01/19 09:32:50 by gasselin         ###   ########.fr        #
+#    Updated: 2022/01/23 12:17:42 by gasselin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
 NAME =		minesweeper
-OBJS_PATH =	objs
 
-SRCS =		main.c
+SRCS_DIR =	srcs
+INCL_DIR =	includes
+OBJ_DIR =	objs
+
+SRCS =		main.c visual.c
 
 CC =		gcc
-CFLAGS =	-Wall -Werror -Wextra -c -g
-INCLUDES =	-Imlx -I.
-LIBS =		-Lmlx -lmlx -framework OpenGL -framework AppKit
+CFLAGS =	-Wall -Werror -Wextra
+INCS =		-Imlx_mac -Iincludes
+LIBS =		-Lmlx_mac -lmlx -framework OpenGL -framework AppKit
 OBJS =		$(SRCS:.c=.o)
 
-SRCS_FULL =	$(addprefix srcs/, $(SRCS))
-OBJS_FULL =	$(addprefix objs/, $(OBJS))
+SRCS_PATH = $(addprefix $(SRCS_DIR)/, $(SRCS))
+OBJS_PATH =	$(addprefix $(OBJ_DIR)/, $(OBJS))
 
-all: $(OBJS_PATH) $(NAME)
+all: $(NAME)
 
-$(OBJS_PATH):
-	@mkdir -p $(OBJS_PATH)
-	@echo Created: Object directory
+#Compiling for Linux
+ifeq ($(shell uname), Linux)
+$(NAME): $(OBJ_DIR) $(OBJS_PATH)
+	@make re --no-print-directory -C ./mlx_linux
+	@$(CC) $(CFLAGS) -D _LINUX=yes srcs/*.c -Imlx_linux -Iincludes -Lmlx_linux -lmlx -lX11 -lm -lz -lXext -o $(NAME)
 
-$(NAME): $(OBJS_FULL)
-	@make re --no-print-directory -C ./ft_printf
-	@$(CC) $(OBJS_FULL) $(LIBS) -o $(NAME) ./ft_printf/libftprintf.a
-	@echo "\\n\033[32;1m SO_LONG HAS BEEN GENERATED \033[0m \\n"
+#Compiling for MacOS
+else
+$(NAME): $(OBJ_DIR) $(OBJS_PATH)
+	@make re --no-print-directory -C ./mlx_mac
+	@$(CC) $(LIBS) $(OBJS_PATH) -o $(NAME)
+endif
 
-$(OBJS_PATH)/%.o: ./%.c
-	@echo "Created: $@\033[1A\033[M"
-	@$(CC) $(CFLAGS) $(INCLUDES) $< -o $@
+$(OBJ_DIR):
+	@mkdir $(OBJ_DIR)
+
+$(OBJ_DIR)/%.o: $(SRCS_DIR)/%.c
+	@$(CC) $(CFLAGS) $(INCLS) -c $< -o $@
+
+all: $(NAME)
 
 clean:
-	@make clean --no-print-directory -C ./ft_printf
-	@rm -rf $(OBJS_FULL) $(OBJS_PATH) 
-	@echo "\033[34;1m CLEANED OBJECT FILES \033[0m"
+	@rm -rf $(OBJS_PATH) $(OBJ_DIR)
 
 fclean: clean
-	@make fclean --no-print-directory -C ./ft_printf
 	@rm -f $(NAME)
-	@echo "\033[34;1m CLEANED FDF \033[0m"
 
 re: fclean all
 
