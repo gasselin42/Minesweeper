@@ -6,9 +6,11 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:55 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/23 15:39:18 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/02/02 12:16:01 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
+
+#pragma once
 
 #ifndef MINESWEEPER_H
 #define MINESWEEPER_H
@@ -52,10 +54,6 @@
 #define DARK_PINK 28
 #define GAME_WON 29
 #define GAME_LOST 30
-
-int SIDE; // side length of the board
-int MINES; // number of mines on the board
-int FLAGS; // number of flags on the map
 
 typedef struct s_img
 {
@@ -105,17 +103,21 @@ typedef struct s_ms {
 	bool	gameOver;
 	bool	start_timer;
 	bool	gameWon;
+
+	int SIDE; // side length of the board
+	int MINES; // number of mines on the board
+	int FLAGS; // number of flags on the map
 }	t_ms;
 
-bool 	isValid(int row, int col);
+bool 	isValid(t_ms *ms, int row, int col);
 bool 	isMine (int row, int col, char board[][MAXSIDE]);
 void 	printBoard(char myBoard[][MAXSIDE]);
-int 	countAdjacentMines(int row ,int col , char realBoard[][MAXSIDE]);
+int 	countAdjacentMines(t_ms *ms, int row ,int col , char realBoard[][MAXSIDE]);
 bool 	playMinesweeperUtil(t_ms *ms, int row, int col);
 void 	placeMines(t_ms *ms);
 void 	playMinesweeper(t_ms *ms);
-void 	chooseDifficultyLevel(int level);
-int		initialize_difficulty(void);
+void 	chooseDifficultyLevel(t_ms *ms, int level);
+int		initialize_difficulty(t_ms *ms);
 
 void		execute(t_ms *ms);
 long int	get_time(void);

@@ -6,7 +6,7 @@
 #    By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+         #
 #                                                 +#+#+#+#+#+   +#+            #
 #    Created: 2021/06/22 11:49:55 by gasselin          #+#    #+#              #
-#    Updated: 2022/01/23 16:09:18 by gasselin         ###   ########.fr        #
+#    Updated: 2022/02/02 12:47:54 by gasselin         ###   ########.fr        #
 #                                                                              #
 # **************************************************************************** #
 
@@ -32,13 +32,13 @@ all: $(NAME)
 #Compiling for Linux
 ifeq ($(shell uname), Linux)
 $(NAME): $(OBJ_DIR) $(OBJS_PATH)
-	@make re --no-print-directory -C ./mlx_linux
-	@$(CC) $(CFLAGS) -D _LINUX=yes srcs/*.c -Imlx_linux -Iincludes -Lmlx_linux -lmlx -lX11 -lm -lz -lXext -o $(NAME)
+	@make re -C ./mlx_linux
+	@$(CC) $(OBJS_PATH) -D _LINUX=yes -Imlx_linux -Iincludes -Lmlx_linux -lmlx -lX11 -lm -lz -lXext -o $(NAME)
 
 #Compiling for MacOS
 else
 $(NAME): $(OBJ_DIR) $(OBJS_PATH)
-	@make re --no-print-directory -C ./mlx_mac
+	@make re -C ./mlx_mac
 	@$(CC) $(LIBS) $(OBJS_PATH) -o $(NAME) ./mlx_mac/libmlx.a
 endif
 

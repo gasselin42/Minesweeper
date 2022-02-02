@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 09:35:05 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/23 15:57:03 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/02/02 12:13:59 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -14,12 +14,12 @@
 
 // A Utility Function to check whether given cell (row, col)
 // is a valid cell or not
-bool isValid(int row, int col)
+bool isValid(t_ms *ms, int row, int col)
 {
 	// Returns true if row number and column number
 	// is in range
-	return (row >= 0) && (row < SIDE) &&
-			(col >= 0) && (col < SIDE);
+	return (row >= 0) && (row < ms->SIDE) &&
+			(col >= 0) && (col < ms->SIDE);
 }
 
 // A Utility Function to check whether given cell (row, col)
@@ -34,53 +34,53 @@ bool isMine (int row, int col, char board[][MAXSIDE])
 
 // A Function to count the number of
 // mines in the adjacent cells
-int countAdjacentMines(int row ,int col, char realBoard[][MAXSIDE])
+int countAdjacentMines(t_ms *ms, int row ,int col, char realBoard[][MAXSIDE])
 {
 	int count = 0;
 
-	if (isValid (row-1, col) == true)
+	if (isValid (ms, row-1, col) == true)
 	{
 		if (isMine (row-1, col, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row+1, col) == true)
+	if (isValid (ms, row+1, col) == true)
 	{
 		if (isMine (row+1, col, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row, col+1) == true)
+	if (isValid (ms, row, col+1) == true)
 	{
 		if (isMine (row, col+1, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row, col-1) == true)
+	if (isValid (ms, row, col-1) == true)
 	{
 		if (isMine (row, col-1, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row-1, col+1) == true)
+	if (isValid (ms, row-1, col+1) == true)
 	{
 		if (isMine (row-1, col+1, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row-1, col-1) == true)
+	if (isValid (ms, row-1, col-1) == true)
 	{
 		if (isMine (row-1, col-1, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row+1, col+1) == true)
+	if (isValid (ms, row+1, col+1) == true)
 	{
 		if (isMine (row+1, col+1, realBoard) == true)
 			count++;
 	}
 
-	if (isValid (row+1, col-1) == true)
+	if (isValid (ms, row+1, col-1) == true)
 	{
 		if (isMine (row+1, col-1, realBoard) == true)
 			count++;
@@ -91,12 +91,12 @@ int countAdjacentMines(int row ,int col, char realBoard[][MAXSIDE])
 
 void	place_indexes(t_ms *ms)
 {
-	for (int i=0; i<SIDE; i++)
+	for (int i=0; i<ms->SIDE; i++)
 	{
-		for (int j=0; j<SIDE; j++)
+		for (int j=0; j<ms->SIDE; j++)
 		{
 			if (ms->realBoard[i][j] != '*')
-				ms->realBoard[i][j] = '0' + countAdjacentMines(i, j, ms->realBoard);
+				ms->realBoard[i][j] = '0' + countAdjacentMines(ms, i, j, ms->realBoard);
 		}
 	}
 }
@@ -128,49 +128,49 @@ bool playMinesweeperUtil(t_ms *ms, int row, int col)
 
 		if (ms->realBoard[row][col] == '0')
 		{
-			if (isValid (row-1, col) == true)
+			if (isValid (ms, row-1, col) == true)
 			{
 				if (isMine (row-1, col, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row-1, col);
 			}
 
-			if (isValid (row+1, col) == true)
+			if (isValid (ms, row+1, col) == true)
 			{
 				if (isMine (row+1, col, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row+1, col);
 			}
 
-			if (isValid (row, col+1) == true)
+			if (isValid (ms, row, col+1) == true)
 			{
 				if (isMine (row, col+1, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row, col+1);
 			}
 
-			if (isValid (row, col-1) == true)
+			if (isValid (ms, row, col-1) == true)
 			{
 				if (isMine (row, col-1, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row, col-1);
 			}
 
-			if (isValid (row-1, col+1) == true)
+			if (isValid (ms, row-1, col+1) == true)
 			{
 				if (isMine (row-1, col+1, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row-1, col+1);
 			}
 
-			if (isValid (row-1, col-1) == true)
+			if (isValid (ms, row-1, col-1) == true)
 			{
 				if (isMine (row-1, col-1, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row-1, col-1);
 			}
 
-			if (isValid (row+1, col+1) == true)
+			if (isValid (ms, row+1, col+1) == true)
 			{
 				if (isMine (row+1, col+1, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row+1, col+1);
 			}
 
-			if (isValid (row+1, col-1) == true)
+			if (isValid (ms, row+1, col-1) == true)
 			{
 				if (isMine (row+1, col-1, ms->realBoard) == false)
 					playMinesweeperUtil(ms, row+1, col-1);
@@ -185,16 +185,16 @@ bool playMinesweeperUtil(t_ms *ms, int row, int col)
 // on the board
 void placeMines(t_ms *ms)
 {
-	bool mark[SIDE*SIDE];
+	bool mark[ms->SIDE*ms->SIDE];
 
 	memset(mark, false, sizeof (mark));
 
 	// Continue until all random mines have been created.
-	for (int i = 0; i < MINES; )
+	for (int i = 0; i < ms->MINES; )
 	{
-		int random = rand() % (SIDE*SIDE);
-		int x = random / SIDE;
-		int y = random % SIDE;
+		int random = rand() % (ms->SIDE*ms->SIDE);
+		int x = random / ms->SIDE;
+		int y = random % ms->SIDE;
 
 		// Add the mine if no mine is placed at this
 		// position on the board
@@ -217,9 +217,9 @@ void placeMines(t_ms *ms)
 void initialise (t_ms *ms)
 {
 	// Assign all the cells as mine-free
-	for (int i=0; i<SIDE; i++)
+	for (int i=0; i<ms->SIDE; i++)
 	{
-		for (int j=0; j<SIDE; j++)
+		for (int j=0; j<ms->SIDE; j++)
 		{
 			ms->myBoard[i][j] = '-';
 			ms->realBoard[i][j] = '-';
@@ -229,28 +229,28 @@ void initialise (t_ms *ms)
 
 // A Function to choose the difficulty level
 // of the game
-void chooseDifficultyLevel (int level)
+void chooseDifficultyLevel (t_ms *ms, int level)
 {
 	if (level == BEGINNER)
 	{
-		SIDE = 9;
-		MINES = 10;
+		ms->SIDE = 9;
+		ms->MINES = 10;
 	}
 
 	if (level == INTERMEDIATE)
 	{
-		SIDE = 16;
-		MINES = 40;
+		ms->SIDE = 16;
+		ms->MINES = 40;
 	}
 
 	if (level == ADVANCED)
 	{
-		SIDE = 24;
-		MINES = 99;
+		ms->SIDE = 24;
+		ms->MINES = 99;
 	}
 }
 
-int    initialize_difficulty(void)
+int    initialize_difficulty(t_ms *ms)
 {
     char input[50];
     
@@ -264,24 +264,24 @@ int    initialize_difficulty(void)
     if (!strcmp(input, "B") || !strcmp(input, "I") || !strcmp(input, "A") || !strcmp(input, "C")) {
         if (!strcmp(input, "C")) {
             printf("Enter side lengths (minimum 7, maximum 40) : ");
-            scanf("%d", &SIDE);
-            if (SIDE < 7 || SIDE > 40)
+            scanf("%d", &ms->SIDE);
+            if (ms->SIDE < 7 || ms->SIDE > 40)
                 return (printf("Incorrect side lengths, must be between 7 and 40\n"));
             printf("Enter number of mines (maximum 400 or 30%% of number of cells) : ");
-            scanf("%d", &MINES);
-            if (MINES < 1 || MINES > 400 || MINES > (SIDE*SIDE*0.3))
-                return (printf("Incorrect number of mines, must be between 0 and %d\n", (int)(SIDE*SIDE*0.3)));
+            scanf("%d", &ms->MINES);
+            if (ms->MINES < 1 || ms->MINES > 400 || ms->MINES > (ms->SIDE*ms->SIDE*0.3))
+                return (printf("Incorrect number of mines, must be between 0 and %d\n", (int)(ms->SIDE*ms->SIDE*0.3)));
         }
         else {
             switch (*input) {
                 case 'B':
-                    chooseDifficultyLevel (BEGINNER);
+                    chooseDifficultyLevel (ms, BEGINNER);
                     break;
                 case 'I':
-                    chooseDifficultyLevel (INTERMEDIATE);
+                    chooseDifficultyLevel (ms, INTERMEDIATE);
                     break;
                 case 'A':
-                    chooseDifficultyLevel (ADVANCED);
+                    chooseDifficultyLevel (ms, ADVANCED);
                     break;
             }
         }
@@ -304,7 +304,7 @@ void	init_grids(t_ms *ms)
 int main()
 {
 	t_ms	ms;
-    FLAGS = 0;
+    ms.FLAGS = 0;
 
     // Initiate the random number generator so that
 	// the same configuration doesn't arises
@@ -317,13 +317,15 @@ int main()
 	ms.crt_x = 0;
 	ms.crt_y = 0;
 
-    if (initialize_difficulty())
+    if (initialize_difficulty(&ms))
+	{
         return (1);
+	}
 
 	init_grids(&ms);
 	
-	ms.win_height = (10 * 3) + 50 + (25 * SIDE) + (4 * (SIDE - 1));
-	ms.win_width = (10 * 2) + (25 * SIDE) + (4 * (SIDE - 1));
+	ms.win_height = (10 * 3) + 50 + (25 * ms.SIDE) + (4 * (ms.SIDE - 1));
+	ms.win_width = (10 * 2) + (25 * ms.SIDE) + (4 * (ms.SIDE - 1));
 
 	// Initialise the Game
 	initialise (&ms);

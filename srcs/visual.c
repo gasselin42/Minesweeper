@@ -6,7 +6,7 @@
 /*   By: gasselin <gasselin@student.42quebec.com    +#+  +:+       +#+        */
 /*                                                +#+#+#+#+#+   +#+           */
 /*   Created: 2022/01/19 14:36:33 by gasselin          #+#    #+#             */
-/*   Updated: 2022/01/23 15:51:27 by gasselin         ###   ########.fr       */
+/*   Updated: 2022/02/02 12:15:30 by gasselin         ###   ########.fr       */
 /*                                                                            */
 /* ************************************************************************** */
 
@@ -131,8 +131,8 @@ void	draw_tile(t_ms *ms, int index, int x, int y)
 
 void	draw_game(t_ms *ms)
 {
-	for (int y = 0; y < SIDE; y++) {
-		for (int x = 0; x < SIDE; x++) {
+	for (int y = 0; y < ms->SIDE; y++) {
+		for (int x = 0; x < ms->SIDE; x++) {
 			switch (ms->myBoard[y][x]) {
 				case '-':
 					draw_tile(ms, PINK_SQR, 10 + (x * 29), 60 + 10 + (y * 29));
@@ -171,9 +171,9 @@ void	draw_game(t_ms *ms)
 					draw_tile(ms, BOMB_RED, 10 + (x * 29), 60 + 10 + (y * 29));
 					break;
 			}
-			if (y > 0 && x < SIDE)
+			if (y > 0 && x < ms->SIDE)
 				draw_tile(ms, HPIPE, 10 + (x * 29), 60 + 6 + (y * 29));
-			if (x > 0 && y < SIDE)
+			if (x > 0 && y < ms->SIDE)
 				draw_tile(ms, VPIPE, 6 + (x * 29), 60 + 10 + (y * 29));
 		}
 	}
@@ -181,8 +181,8 @@ void	draw_game(t_ms *ms)
 
 void	draw_gameOver(t_ms *ms)
 {
-	for (int y = 0; y < SIDE; y++) {
-		for (int x = 0; x < SIDE; x++) {
+	for (int y = 0; y < ms->SIDE; y++) {
+		for (int x = 0; x < ms->SIDE; x++) {
 			if (ms->myBoard[y][x] == '*')
 				continue ;
 				
@@ -257,8 +257,8 @@ bool	is_opened(char c)
 
 void	gameWonCheck(t_ms *ms)
 {
-	for (int i = 0; i < SIDE; i++) {
-		for (int j = 0; j < SIDE; j++) {
+	for (int i = 0; i < ms->SIDE; i++) {
+		for (int j = 0; j < ms->SIDE; j++) {
 			if (ms->myBoard[j][i] == ms->realBoard[j][i])
 				continue ;
 			else if (ms->realBoard[j][i] == '*') {
@@ -303,12 +303,12 @@ int deal_mouse(int button, int x, int y, t_ms *ms)
 					if (ms->myBoard[sqr_y][sqr_x] == '-')
 					{
 						ms->myBoard[sqr_y][sqr_x] = 'F';
-						FLAGS++;
+						ms->FLAGS++;
 					}
 					else if (ms->myBoard[sqr_y][sqr_x] == 'F')
 					{
 						ms->myBoard[sqr_y][sqr_x] = '-';
-						FLAGS--;
+						ms->FLAGS--;
 					}
 				}
 				
@@ -369,7 +369,7 @@ void update_time(t_ms *ms)
 
 void update_mine_count(t_ms *ms)
 {
-	int mines_count = MINES - FLAGS;
+	int mines_count = ms->MINES - ms->FLAGS;
 
 	draw_tile(ms, 0, 15, 15);
 	draw_tile(ms, 0, 15 + 24, 15);
